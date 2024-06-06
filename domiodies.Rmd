@@ -1,0 +1,264 @@
+---
+title: "Domino Die Problem"
+author: "Matthew Li"
+date: "5/25/2024"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    keep_tex: true
+---
+
+
+```{r part1, echo=TRUE}
+
+# https://codegolf.stackexchange.com/questions/2602/draw-dice-results-in-ascii
+
+
+genPipsMtrx <- function(fst_pips, fst_rot) {
+  dtMtrx1 <- matrix(rep(0, 9), nrow=3, ncol=3)
+  if (fst_pips == 1) {
+    dtMtrx1 <- matrix(c(0,0,0,0,1,0,0,0,0), nrow=3, ncol=3)
+  } else if (fst_pips == 2) {
+    if (fst_rot) {
+      dtMtrx1 <- matrix(c(1,0,0,0,0,0,0,0,1), nrow=3, ncol=3)
+    } else {
+      dtMtrx1 <- matrix(c(0,0,1,0,0,0,1,0,0), nrow=3, ncol=3)
+    }
+  } else if (fst_pips == 3) {
+    if (fst_rot) {
+      dtMtrx1 <- matrix(c(1,0,0,0,1,0,0,0,1), nrow=3, ncol=3)
+    } else {
+      dtMtrx1 <- matrix(c(0,0,1,0,1,0,1,0,0), nrow=3, ncol=3)
+    }
+  } else if (fst_pips == 4) {
+    dtMtrx1 <- matrix(c(1,0,1,0,0,0,1,0,1), nrow=3, ncol=3) 
+  } else if (fst_pips == 5) {
+    dtMtrx1 <- matrix(c(1,0,1,0,1,0,1,0,1), nrow=3, ncol=3)
+  } else if (fst_pips == 6) {
+    if (fst_rot) {
+      dtMtrx1 <- matrix(c(1,0,1,1,0,1,1,0,1), nrow=3, ncol=3)
+    } else {
+      dtMtrx1 <- matrix(c(1,1,1,0,0,0,1,1,1), nrow=3, ncol=3)
+    }
+  }
+  return(dtMtrx1)
+}
+
+dispTpDwnFace <- 
+  function (pips, rot) {
+    pipLineTopBot <- "-----"
+    if (pips == 1) {
+      pipLine2 <- c("|   |")
+      pipLine3 <- c("| o |")
+      pipLine4 <- c("|   |")
+    }
+    if (pips == 2) {
+      pipLine2 <- "|  o|"
+      pipLine3 <- "|   |"
+      pipLine4 <- "|o  |"
+      swpTmp <- pipLine2
+      if (rot %% 2 == 1) {
+        pipLine2 <- pipLine4
+        pipLine4 <- swpTmp
+      }
+    }
+    if (pips == 3) {
+      pipLine2 <- c("|  o|")
+      pipLine3 <- c("| o |")
+      pipLine4 <- c("|o  |")
+      swpTmp <- pipLine2
+      if (rot %% 2 == 1) {
+        pipLine2 <- pipLine4 
+        pipLine4 <- swpTmp
+      }
+    }
+    if (pips == 4) {
+      pipLine2 <- "|o o|"
+      pipLine3 <- "|   |"
+      pipLine4 <- pipLine2
+    }
+    if (pips == 5) {
+      pipLine2 <- "|o o|"
+      pipLine3 <- "| o |"
+      pipLine4 <- pipLine2
+    }
+    if (pips == 6) {
+      pipLine2 <- "|ooo|"
+      pipLine3 <- "|   |"
+      pipLine4 <- pipLine2
+      if (rot %% 2 == 1) {
+        pipLine2 <- c("|o o|")
+        pipLine3 <- pipLine2
+        pipLine4 <- pipLine2
+      }
+    }
+    print(pipLineTopBot)
+    print(pipLine2)
+    print(pipLine3)
+    print(pipLine4)
+    print(pipLineTopBot)
+  }
+
+
+isValidDominoFace <-
+  function(top_pips, bot_pips, top_rotd, bot_rotd) {
+    if (top_pips <= bot_pips) {
+        if (!top_rotd && !bot_rotd) {
+           return(TRUE)
+        }
+        if (top_pips == 1 || top_pips == 4 || top_pips == 5) {
+          if (bot_pips == 1 || bot_pips == 4 || bot_pips == 5) {
+            return(TRUE)
+          }
+        }
+        return(FALSE)
+    }
+    return(FALSE)
+  }
+
+extraccRw <- function(rw) {
+    rwNmrc <- rw
+    tmprFi <- rwNmrc
+    tmprFi <- substring(tmprFi, nchar(rwNmrc) - 4, nchar(rwNmrc))
+    tmprFiArr <- as.array(tmprFi)
+    pastel <- ""
+    for (j in 1:length(tmprFiArr)) {
+      pastel <- paste0(pastel, tmprFiArr[j])
+    }
+    return(pastel)
+}
+
+
+genDmnoMtrx <- function(tp_pips, bt_pips, tp_rotd, bt_rotd, rotd_domino) {
+  dtMtrxTp <- genPipsMtrx(tp_pips, tp_rotd)
+  dtMtrxBt <- genPipsMtrx(bt_pips, bt_rotd)
+  collatedMtrx <- rbind(dtMtrxTp, dtMtrxBt)
+  if (rotd_domino) {
+    if (tp_pips == 3 || tp_pips == 2) {
+      rw1Tmp <- dtMtrxTp[1,]
+      dtMtrxTp[1,] <- dtMtrxTp[3,]
+      dtMtrxTp[3,] <- rw1Tmp
+    } else {
+      dtMtrxTp <- t(dtMtrxTp)
+    }
+    if (bt_pips == 3 || bt_pips == 2) {
+      rw1Tmp <- dtMtrxBt[1,]
+      dtMtrxBt[1,] <- dtMtrxBt[3,]
+      dtMtrxBt[3,] <- rw1Tmp
+    } else {
+      dtMtrxBt <- t(dtMtrxBt)
+    }
+    collatedMtrx <- cbind(dtMtrxTp, dtMtrxBt)
+  }
+  return(collatedMtrx)
+}
+
+dispHrzntlDmno <- function(LHS_pips, RHS_pips, LHS_rot, RHS_rot) {
+  tpLn <- ",----,----,"
+  if (LHS_pips == 2) {
+    fstPtFstLn <-  "|'   |"
+    fstPtThrdLn <- "|__'_|"
+    if (LHS_rot) {
+      fstPtFstLn <- "|   '|"
+      fstPtThrdLn <-"|_'__|"
+    }
+  } else if (LHS_pips == 1) {
+    fstPtFstLn <- "|  . |"
+    fstPtThrdLn <-"|____|"
+  } else if (LHS_pips == 3) {
+    fstPtFstLn <-  "|'.  |"
+    fstPtThrdLn <- "|__'_|"
+    if (LHS_rot) {
+      fstPtFstLn <-  "|  .'|"
+      fstPtThrdLn <- "|_'__|"
+    }
+  } else if (LHS_pips == 4) {
+    fstPtFstLn <- "|' ' |"
+    fstPtThrdLn <-"|'_'_|"
+  } else if (LHS_pips == 5) {
+    fstPtFstLn <- "|'.' |"
+    fstPtThrdLn <-"|'_'_|"
+  } else if (LHS_pips == 6) {
+    fstPtFstLn <- "|; ; |"
+    fstPtThrdLn <-"|`_`_|"
+    if (LHS_rot) {
+      fstPtFstLn <- "|''' |"
+      fstPtThrdLn <-"|'''_|"
+    }
+  } else if (LHS_pips == 0) {
+    fstPtFstLn <- "|    |"
+    fstPtThrdLn <-"|____|"
+  }
+  if (RHS_pips == 2) {
+    sndPtFstLn <-  "'   |"
+    sndPtThrdLn <- "__'_|"
+    if (RHS_rot) {
+      sndPtFstLn <- "   '|"
+      sndPtThrdLn <-"_'__|"
+    }
+  } else if (RHS_pips == 1) {
+    sndPtFstLn <- "  . |"
+    sndPtThrdLn <-"____|"
+  } else if (RHS_pips == 3) {
+    sndPtFstLn <-  "'.  |"
+    sndPtThrdLn <- "__'_|"
+    if (RHS_rot) {
+      sndPtFstLn <-  "  .'|"
+      sndPtThrdLn <- "_'__|"
+    }
+  } else if (RHS_pips == 4) {
+    sndPtFstLn <- "' ' |"
+    sndPtThrdLn <-"'_'_|"
+  } else if (RHS_pips == 5) {
+    sndPtFstLn <- "'.' |"
+    sndPtThrdLn <-"'_'_|"
+  } else if (RHS_pips == 6) {
+    sndPtFstLn <- "; ; |"
+    sndPtThrdLn <-"`_`_|"
+    if (RHS_rot) {
+      sndPtFstLn <- "''' |"
+      sndPtThrdLn <-"'''_|"
+    }
+  } else if (RHS_pips == 0) {
+    sndPtFstLn <- "    |"
+    sndPtThrdLn <-"____|"
+  }
+  flFstRw <- paste0(fstPtFstLn, sndPtFstLn)
+  flThrdRw <- paste0(fstPtThrdLn, sndPtThrdLn)
+  print(tpLn)
+  print(flFstRw)
+  print(flThrdRw)
+}
+
+valids <- 0
+cntr <- 0
+for (i in 1:6) {
+  for (l in 0:3) {
+    for (j in 1:6) {
+      for (k in 0:3) {
+        isIthJthValidN <- isValidDominoFace(i, j, l %% 2, k %% 2)
+        if (isIthJthValidN) {
+          valids <- valids + 1
+        }
+        cntr <- cntr + 1
+      }
+    }
+  }
+}
+
+probOfValidDomino <- valids / cntr
+```
+
+The probability of rolling a valid domino tile is `r probOfValidDomino` or $\frac{156}{576}$.
+
+```{r part2, echo=FALSE}
+
+for (i in 0:6) {
+  for (j in 0:6) {
+      shwd <- genDmnoMtrx(i, j, FALSE, FALSE, TRUE)
+      dispHrzntlDmno(i,j,FALSE,FALSE)
+  }
+}
+
+
+```
