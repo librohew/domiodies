@@ -259,7 +259,4 @@ for (i in 0:6) {
       dispHrzntlDmno(i,j,FALSE,FALSE)
   }
 }
-
-print("hello world")
-
 ```
