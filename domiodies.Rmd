@@ -260,5 +260,6 @@ for (i in 0:6) {
   }
 }
 
+print("hello world")
 
 ```
