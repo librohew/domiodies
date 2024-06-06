@@ -260,3 +260,6 @@ for (i in 0:6) {
   }
 }
 ```
+
+Prompt: Childhood games.
+I wanted to do a write-up as part of my creative writing group. It will not include characters or any thing of the sort, but will utilize the fact that it is written in a text editor. Not the bare bones sort of text editor, but just the one that has markdown built into it. I have got-for, aged mushrooms seize words in everything. How does the environment change when nature and nurture mix and match? Already at the failure of two or three contestations, I realize the brief simplicity of writing in a peoples-please editorial, give 'em heck. Gatsby once had a childhood, and those who thrive to see the lit day all have childhoods. Take Faye Valentine from Cowboy Bebop, she was cryogenically-aged, or what have you, until she was hundreds of years old but didn't look a day over 30. Childhood and Anne Stoler talked about education. I didn't search it up, but that seems to be the name of the game. Boy, I think that the world wraps up itself in quite the bundle of joy sometimes. Am I glad I brought the laptop? Brother, this is the frat. of sorrow. When we go down to consume Philly Cheesesteaks, what stakes are there to fill our shoes and go down in memory. Like Pharrell W. (sans the Carlos, and the William), this record will be uploaded to the cloud, lest some harpy's shoot me down, I am titanite.  
