@@ -251,12 +251,32 @@ probOfValidDomino <- valids / cntr
 
 The probability of rolling a valid domino tile is `r probOfValidDomino` or $\frac{156}{576}$.
 
-```{r part2, echo=FALSE}
+```{r part2, echo=TRUE}
 
+dmnoMtrxHrzntlLzt <- vector("list", 28)
+cntr <- 1
 for (i in 0:6) {
   for (j in 0:6) {
-      shwd <- genDmnoMtrx(i, j, FALSE, FALSE, TRUE)
-      dispHrzntlDmno(i,j,FALSE,FALSE)
+      if (i <= j) {
+        dmnoMtrxHrzntlLzt[[cntr]] <- genDmnoMtrx(i, j, FALSE, FALSE, TRUE)
+        cntr <- cntr + 1
+      }
   }
 }
+
+dmnoMtrxVrtclLzt <- vector("list", 49)
+cntrVrt <- 1
+for (i in 0:6) {
+  for (j in 0:6) {
+    dmnoMtrxVrtclLzt[[cntrVrt]] <- genDmnoMtrx(i, j, FALSE, FALSE, FALSE)
+    cntrVrt <- cntrVrt + 1
+  }
+}
+
+ultmtDmnoLzt <- c(dmnoMtrxHrzntlLzt, dmnoMtrxVrtclLzt)
+
+dmnSmpl <- sample(ultmtDmnoLzt, 50)
+
+
+
 ```
