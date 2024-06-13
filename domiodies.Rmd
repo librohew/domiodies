@@ -276,10 +276,4 @@ for (i in 0:6) {
 ultmtDmnoLzt <- c(dmnoMtrxHrzntlLzt, dmnoMtrxVrtclLzt)
 
 dmnSmpl <- sample(ultmtDmnoLzt, 50)
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> cf1568bd994721a1b62b370a0da9bbb43157ca27
 ```
